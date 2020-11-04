@@ -2,6 +2,14 @@
 import System.IO
 
 
+-- Información Comercial
+nombre = "Alquiler Bici Laita"
+web = "laita.com"
+telefono = "27691234"
+tarifaPedal = 500
+tarifaElectrico = 1000
+
+
 
 archParqueos = "datos/parqueos.txt"
 archBicicletas = "datos/bicicletas.txt"
