@@ -81,9 +81,9 @@ reescribirAlquileres datos fileName= do
     return ()
 
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: una data alquiler
+-- Salida: Muestra en pantalla los datos asociados a una data alquiler
+-- Objetivo: Mostrar los datos de diferentes objetos de tipo Alquiler
 muestraAlquiler :: Alquiler -> IO ()
 muestraAlquiler alquiler =
     let
@@ -101,9 +101,9 @@ muestraAlquiler alquiler =
             putStr ("")
 
 -- **muestra los alquileres
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: Una lista de alquileres
+-- Salida: la información detallada de todos los alquileres 
+-- Objetivo: Tomar la lista de alquileres y recorrer la lista, para así poder mostrar los datos relacionada a cada uno de los alquileres
 muestrarAlquileres :: [Alquiler] -> IO()
 muestrarAlquileres [] = return ()
 muestrarAlquileres xs = do
@@ -111,9 +111,9 @@ muestrarAlquileres xs = do
     muestrarAlquileres (tail xs)
 
 -- Separa las lineas de alquileres, y crea los alquileres
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: Una lista de strings
+-- Salida: los alquileres separados y por comas, y convertidos en objetos alquileres
+-- Objetivo: Recorrer toda la lista de caracteres que hacen los objetos alquileres
 separaAlquileres :: [[Char]] -> [Alquiler]
 separaAlquileres xs = 
     if null(xs) then []
@@ -121,9 +121,9 @@ separaAlquileres xs =
         [crearAlquiler(funcionSplit ((head xs),""))] ++ separaAlquileres(tail xs)
 
 -- **Leer los alquileres que hay 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: una ruta de un archivo
+-- Salida: una lista de alquileres
+-- Objetivo: leer un archivo de texto plano y derivar a funciones para crear objetos de tipo alquiler
 leerAlquileres :: FilePath -> IO[Alquiler]
 leerAlquileres archivo = do
     file <- openFile archivo ReadWriteMode
@@ -132,9 +132,9 @@ leerAlquileres archivo = do
     --hClose file
     return alquileres
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: toma una lista de alquileres y un identificador
+-- Salida: la lista de alquileres con el estado del alquiler asociado a la identificador cambiado
+-- Objetivo: recorrer la lista de alquileres y encontrar un alquiler y cambiar su estado
 cambiarEstado ::[Alquiler] -> Integer->[Alquiler]
 cambiarEstado alquileres id = do
     let codigoActual = getIdAlquiler(head alquileres)
@@ -189,9 +189,9 @@ getAlquilerF :: Factura -> Integer
 getAlquilerF (Factura _ _ _ _ alquilerF) = alquilerF;
 -- ******************************************************************************
 -- ************
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: una lista de facturas y un res
+-- Salida: toma la lista de facturas y las convierte en string
+-- Objetivo: Tomar las facturas y aplanarlas
 cambiarFactura :: [Factura] -> String -> String
 cambiarFactura [] s = s
 cambiarFactura facturas string = do
@@ -204,9 +204,9 @@ cambiarFactura facturas string = do
     cambiarFactura (tail facturas) (string ++ nuevo)
 
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: Una factura
+-- Salida: muestra los datos de una factura
+-- Objetivo: toma una factura y con diferentes metodos get, muestra su información
 --Muestra una factura
 muestraFactura :: Factura -> IO ()
 muestraFactura factura =
@@ -219,9 +219,9 @@ muestraFactura factura =
     in
         putStr("\tID: " ++ show id ++ "\n\tTotal de kilometros: " ++ show kmTotal ++ "\n\tTarifa por bicicleta: " ++ show tarifaTotal ++ "\n\tTotal: " ++ show total ++ "\n\tCódigo de alquiler: " ++ show alquilerF ++ "\n")
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: una lista de facturas
+-- Salida: deriva a otra funcion para mostrar información
+-- Objetivo: recorrer la lista de facturas, para mostrar su información
 -- Muestra todos los alquilres
 mostrarFacturas :: [Factura] -> IO()
 mostrarFacturas [] = return ()
@@ -229,9 +229,9 @@ mostrarFacturas xs = do
     muestraFactura (head xs)
     mostrarFacturas (tail xs)
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: Una lista de char
+-- Salida: una lista de facturas
+-- Objetivo: Crear tipos de datos facturas y hacer un spli
 ---Separa las facturas del txt y crea nuevas facturas
 separaFacturas :: [[Char]] -> [Factura]
 separaFacturas xs = 
@@ -239,9 +239,9 @@ separaFacturas xs =
     else
         [crearFactura(funcionSplit ((head xs),""))] ++ separaFacturas(tail xs)
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: un fichero
+-- Salida: el fichero leido y una lista de facturas
+-- Objetivo: leer un fichero de txt y crear objetos de facturas
 leerFacturas :: FilePath -> IO[Factura]
 leerFacturas archivo = do
     file <- openFile archivo ReadWriteMode
@@ -352,9 +352,9 @@ facturarAlquilerAux alquilerActual tarifa idFactura = do
     let total = kmTotal * tarifa
     crearFactura [show idFactura, show kmTotal, show total, show idAlquiler]
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: una lista de alquileres, una lista de facturas, un enteroo
+-- Salida: Retorna diferentes funciones para completar el proceso de facturación
+-- Objetivo: Facturar un alquiler
 facturar :: [Alquiler] ->[Factura] ->Integer -> IO()
 facturar alquileres facturas idFactura = do
     putStr "\nDigite el código de alquiler que desea facturar: "
@@ -370,9 +370,6 @@ facturar alquileres facturas idFactura = do
         let facturasEscribir = cambiarFactura nuevasFacturas ""
 
         reescribirAlquileres alquileresEscribir "alquilerFacturado.txt"
-        putStr "buen"
-     --   reescribirFacturas facturasEscribir "facturaNueva.txt"
-        putStr "mal"
         agregarFactura (head nueva) 
         putStr "Facturado"
         putStr "\n--------------------------------------"
@@ -397,16 +394,16 @@ consultarFactura lista idFacturaInt = do
     else
         consultarFactura (tail lista) idFacturaInt
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: Una lista de facturas
+-- Salida: El largo de esa lista de facturas 
+-- Objetivo: Tomar el largo sde la factura y convertirlo en el identificador de una factura nueva
 largoFactura :: [Factura] -> Integer
 largoFactura facturas=
     1+largoFactura(tail facturas)
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: Una opcion que el usuario deseee completar de las generales
+-- Salida: retorna diferente funcionalidades para completar el uso
+-- Objetivo: Solicitar informacioón al usuario para poder llevar a cabo los funcionalidades generales de sistema
 menuGeneral (alqui,facturas) = do
     putStr "\n|--------OPCIONES GENERALES DEL SISTEMA--------|\n"
     putStr "\n\tMENÚ PRINCIPAL\n"
@@ -444,9 +441,9 @@ menuGeneral (alqui,facturas) = do
             return()
             
 
--- Entrada: 
--- Salida: 
--- Objetivo
+-- Entrada: nada
+-- Salida: menu de opciones
+-- Objetivo: Leer archivos, formar estructuras
 -- *****Menu principal 
 menuAux () = do 
     alqui <- leerAlquileres "alquiler.txt"
