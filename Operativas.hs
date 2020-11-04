@@ -1,8 +1,10 @@
 
+module Operativas where
+
 import System.IO
 
 
--- Información Comercial
+
 nombre = "Alquiler Bici Laita"
 web = "laita.com"
 telefono = "27691234"
@@ -25,7 +27,9 @@ data Parqueo = Parqueo String String Float Float [Bicicleta]
 data Provincia = Provincia String [Parqueo]
 
 
-
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 pedirRutas :: IO [Provincia]
 pedirRutas = do
     putStr "Ingrese la ruta al archivo de parqueos: "
@@ -43,6 +47,9 @@ pedirRutas = do
 -- funcion recursiva con 7 parámetros acumulativos, para cada parqueo...
 -- * pero por cada parqueo, recorrer y adjuntar todas las bicicletas correspondientes
 
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 formarProvincias :: FilePath -> FilePath -> FilePath -> FilePath -> IO [Provincia]
 formarProvincias parqPers parqIngr biciPers biciIngr =
     do
@@ -86,7 +93,9 @@ formarProvincias parqPers parqIngr biciPers biciIngr =
 
 
 
-
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 formarParqueos :: FilePath -> FilePath -> FilePath -> FilePath -> IO [Parqueo]
 formarParqueos parqPers parqIngr biciPers biciIngr =
     do
@@ -121,7 +130,9 @@ formarParqueos parqPers parqIngr biciPers biciIngr =
                     | otherwise = aux xs ((formarParqueo x bP bI):p)
 
 
-
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 existeParqueo :: [Parqueo] -> String -> Bool
 existeParqueo [] _ = True
 existeParqueo ((Parqueo nomE _ _ _ _):xs) nomN
@@ -129,7 +140,9 @@ existeParqueo ((Parqueo nomE _ _ _ _):xs) nomN
     | otherwise = existeParqueo xs nomN
 
 
-
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 formarParqueo :: [String] -> [[String]] -> [[String]] -> Parqueo
 formarParqueo (nombre:direccion:x:y:empty) bicicletasP bicicletasI =
     Parqueo nombre direccion (read x :: Float) (read y :: Float) (aux bicicletasP []) where
@@ -145,18 +158,25 @@ formarParqueo (nombre:direccion:x:y:empty) bicicletasP bicicletasI =
             | otherwise = aux xs ((Bicicleta (x!!0) (x!!1)):p)
 
 
-
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 existeBicicleta :: [Bicicleta] -> String -> Bool
 existeBicicleta [] _ = True
 existeBicicleta ((Bicicleta idE _):xs) idN
     | idE == idN = False
     | otherwise = existeBicicleta xs idN
 
-
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 splitEnvolt :: String -> [String]
 splitEnvolt str = funcionSplit(str, "")
 
 
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 funcionSplit :: ([Char],[Char]) -> [[Char]]
 funcionSplit (str,dato) = 
     if str == "" then [dato]
@@ -167,6 +187,57 @@ funcionSplit (str,dato) =
             funcionSplit((tail str),dato++[(head str)])
 
 
+-- Entrada: 
+-- Salida: 
+-- Objetivo
+mostP :: IO ()
+mostP = do
+    putStr "Ingrese una provincia: "
+    prov <- getLine
+    return ()
+
+-- Entrada: 
+-- Salida: 
+-- Objetivo
+mostB :: IO ()
+mostB = do
+    putStr "Ingrese un parqueo: "
+    parq <- getLine
+    return ()
+
+-- Entrada: 
+-- Salida: 
+-- Objetivo
+mostU :: IO ()
+mostU = do
+    putStr "Ingrese una cedula: "
+    usua <- getLine
+    return ()
+
+-- Entrada: 
+-- Salida: 
+-- Objetivo
+stat :: IO ()
+stat = do
+    putStr "\n-- Estadisticas --\n\
+    \1. Top 5 usuarios con mas viajes\n\
+    \2. Top 5 parqueos con mas viajes\n\
+    \3. Top 3 bicicletas con mas km recorridos\n\
+    \4. Resumen\n\
+    \5. Volver\n\n\
+	\-> "
+    opt <- getLine
+    case opt of
+        "1" -> stat--mostrarParqueos
+        "2" -> stat--mostrarBicicletas
+        "3" -> stat--mostrarUsuarios
+        "4" -> stat--estadisticas
+        "5" -> return ()--volver
+        _ -> stat--error "Entrada Invalida"
+
+-- Entrada: 
+-- Salida: 
+-- Objetivo
 menuOp :: IO ()
 menuOp = do
     putStr "\n-- Menu Operativo --\n\
@@ -178,11 +249,13 @@ menuOp = do
 	\-> "
     opt <- getLine
     case opt of
-        "1" -> menuOp--mostrarParqueos
-        "2" -> menuOp--mostrarBicicletas
-        "3" -> menuOp--mostrarUsuarios
-        "4" -> menuOp--estadisticas
+        "1" -> do mostP--mostrarParqueos
+                  menuOp
+        "2" -> do mostB--mostrarBicicletas
+                  menuOp
+        "3" -> do mostU--mostrarUsuarios
+                  menuOp
+        "4" -> do stat--estadisticas
+                  menuOp
         "5" -> return ()--volver
         _ -> menuOp--error "Entrada Invalida"
-
-main = menuOp
